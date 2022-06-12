@@ -168,7 +168,7 @@ main {
   width: fit-content; 
 
   h1 {
-    margin-bottom: .5em;
+    margin-bottom: .5rem;
     color: rgb(129, 48, 24);
   }
 
@@ -192,7 +192,7 @@ main {
     width: fit-content;
     margin: 0 auto;
     display: flex;
-    gap: 2em;
+    gap: .5em;
   }
 
   .btn-wrapper:nth-of-type(2) {
@@ -239,4 +239,32 @@ main {
   
   
 }
+
+@media screen and (max-width: 1220px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  html {
+    font-size: 12px;
+  }
+
+  #app {
+    height: 100vh;
+  }
+
+  main {
+    padding: 3em 0;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  #app {
+    height: fit-content;
+  }
+}
+
+
 </style>
