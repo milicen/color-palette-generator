@@ -6,7 +6,8 @@ export default {
     props: {
         color: Array
     },
-    setup(props, {expose}) {
+    emits: ['card-click'],
+    setup(props, {expose, emit}) {
         let dict = {
             0: 0,
             1: 1,

@@ -1,11 +1,18 @@
 <template>
   <main>
     <h1>Color Palette Generator</h1>
+    <Alert :isShow="canShowMessage">
+      {{message}} copied!
+    </Alert>
     <ul class="card-container">
       <li v-for="(color, index) in colors" :key="index">
-        <ColorCard :color="color" :ref="el => {if (el) cards.push(el)}"/>
+        <ColorCard 
+          :color="color" 
+          @click="showMessage(cards[index].hexValue)"
+          :ref="el => {if (el) cards.push(el)}"/>
       </li>  
     </ul>  
+    <small class="info">Click on any color to copy its hex value</small>
     <div class="buttons">
       <div class="btn-wrapper">
         <button @click="fetchColor">
@@ -28,24 +35,45 @@
 
 <script>
 import ColorCard from './components/ColorCard.vue'
+import Alert from './components/Alert.vue'
 import {onBeforeUpdate, ref} from 'vue'
 import {toClipboard} from '@soerenmartius/vue3-clipboard'
 
 export default {
   name: 'App',
   components: {
-    ColorCard
+    ColorCard,
+    Alert
   },
   setup() {
     let cards = ref([])
     let colors = ref([[210,210,210],[210,210,210],[210,210,210],[210,210,210],[210,210,210]])
-    
+    let canShowMessage = ref(false)
+    let message = ref('')
+
+    function showMessageCountdown() {
+      canShowMessage.value = true
+      setTimeout(() => {
+        canShowMessage.value = false
+      }, 2000)
+    }
+
+    function setMessage(value) {
+      message.value = value
+    }
+
+    function showMessage(msg) {
+      setMessage(msg)
+      showMessageCountdown()
+    }
+
     function copyAllColors() {
       let arr = []
       cards.value.forEach(card => {
         arr.push(card.hexValue)
       });
       toClipboard(arr.join(' '))
+      showMessage('Colors')
     }
 
     let copyAllFired = false
@@ -100,7 +128,15 @@ export default {
       cards.value.splice(0, cards.value.length)
     })
 
-    return {cards, colors, fetchColor, copyAllColors}
+    return {
+      cards, 
+      colors, 
+      canShowMessage, 
+      message, 
+      showMessage, 
+      fetchColor, 
+      copyAllColors
+    }
   },
   mounted() {
     this.fetchColor()
@@ -132,7 +168,7 @@ main {
   width: fit-content; 
 
   h1 {
-    margin-bottom: 1em;
+    margin-bottom: .5em;
     color: rgb(129, 48, 24);
   }
 
@@ -143,6 +179,13 @@ main {
     justify-content: center;
     gap: 1.5rem;
     margin-bottom: 2em;
+  }
+
+  .info {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 1em;
+    color: rgb(129, 48, 24);
   }
 
   .buttons {
