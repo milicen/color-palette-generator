@@ -107,7 +107,7 @@ export default {
 
     async function fetchColor() {
       console.log('fetch color')
-      // if(window.location.origin.match(/localhost/)) {
+      if(window.location.origin.match(/localhost/)) {
         var url = "http://colormind.io/api/";
         var data = {
           model : "default"
@@ -125,7 +125,8 @@ export default {
         http.open("POST", url, true);
         http.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         http.send(JSON.stringify(data));
-      // } else {
+      } 
+      // else {
       //   var url = "https://colormind.io/api/";
       //   var data = {
       //     model : "default"
@@ -134,6 +135,25 @@ export default {
       //   console.log(request)
       //   colors.value = [...request.result]
       // }
+      else {
+        var url = "https://colormind.io/api/";
+        var data = {
+          model : "default"
+        }
+        var http = new XMLHttpRequest();
+        http.onreadystatechange = function() {
+          if(http.readyState == 4 && http.status == 200) {
+            colors.value = [...JSON.parse(http.responseText).result];
+          }
+          else {
+            console.log('error')
+          }
+        }
+
+        http.open("POST", url, true);
+        http.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        http.send(JSON.stringify(data));
+      }
       
     }        
 
