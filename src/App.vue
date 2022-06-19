@@ -107,7 +107,7 @@ export default {
 
     async function fetchColor() {
       console.log('fetch color')
-      if(window.location.origin.match(/localhost/)) {
+      // if(window.location.origin.match(/localhost/)) {
         var url = "http://colormind.io/api/";
         var data = {
           model : "default"
@@ -124,15 +124,15 @@ export default {
 
         http.open("POST", url, true);
         http.send(JSON.stringify(data));
-      } else {
-        var url = "https://colormind.io/api/";
-        var data = {
-          model : "default"
-        }
-        var request = await axios.post(url, data)
-        console.log(request)
-        colors.value = [...request.result]
-      }
+      // } else {
+      //   var url = "https://colormind.io/api/";
+      //   var data = {
+      //     model : "default"
+      //   }
+      //   var request = await axios.post(url, data)
+      //   console.log(request)
+      //   colors.value = [...request.result]
+      // }
       
     }        
 
