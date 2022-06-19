@@ -123,6 +123,7 @@ export default {
         }
 
         http.open("POST", url, true);
+        http.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         http.send(JSON.stringify(data));
       // } else {
       //   var url = "https://colormind.io/api/";
