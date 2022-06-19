@@ -38,6 +38,7 @@ import ColorCard from './components/ColorCard.vue'
 import Alert from './components/Alert.vue'
 import {onBeforeUpdate, ref} from 'vue'
 import {toClipboard} from '@soerenmartius/vue3-clipboard'
+import axios from 'axios'
 
 export default {
   name: 'App',
@@ -104,24 +105,35 @@ export default {
       }
     })
 
-    function fetchColor() {
+    async function fetchColor() {
       console.log('fetch color')
-      var url = "http://colormind.io/api/";
-      var data = {
-        model : "default"
-      }
-      var http = new XMLHttpRequest();
-      http.onreadystatechange = function() {
-        if(http.readyState == 4 && http.status == 200) {
-          colors.value = [...JSON.parse(http.responseText).result];
+      if(window.location.origin.match(/localhost/)) {
+        var url = "http://colormind.io/api/";
+        var data = {
+          model : "default"
         }
-        else {
-          console.log('error')
+        var http = new XMLHttpRequest();
+        http.onreadystatechange = function() {
+          if(http.readyState == 4 && http.status == 200) {
+            colors.value = [...JSON.parse(http.responseText).result];
+          }
+          else {
+            console.log('error')
+          }
         }
-      }
 
-      http.open("POST", url, true);
-      http.send(JSON.stringify(data));
+        http.open("POST", url, true);
+        http.send(JSON.stringify(data));
+      } else {
+        var url = "https://colormind.io/api/";
+        var data = {
+          model : "default"
+        }
+        var request = await axios.post(url, data)
+        console.log(request)
+        colors.value = [...request.result]
+      }
+      
     }        
 
     onBeforeUpdate(() => {
